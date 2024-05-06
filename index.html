@@ -68,11 +68,6 @@
             overflow: hidden; /* Ensure poster does not overflow */
             display: flex; /* Flexbox for vertical alignment */
             flex-direction: column; /* Stack movie details vertically */
-            transition: box-shadow 0.3s ease; /* Smooth transition for the glow effect */
-        }
-
-        .movie:hover {
-            box-shadow: 0 0 10px 5px red; /* Add a red glow effect when hovered */
         }
 
         .movie h2 {
@@ -167,11 +162,15 @@
                 // Check if any movie matches the search term
                 const exactMatch = filteredMovies.find(movie => movie.title.toLowerCase() === searchTerm);
                 if (exactMatch) {
-                    // If there's an exact match, display it first
-                    displayMovies([exactMatch, ...filteredMovies.filter(movie => movie !== exactMatch)]);
-                } else {
-                    displayMovies(filteredMovies);
+                    // Move exact match to the beginning of the array
+                    const index = filteredMovies.indexOf(exactMatch);
+                    if (index > 0) {
+                        filteredMovies.splice(index, 1);
+                        filteredMovies.unshift(exactMatch);
+                    }
                 }
+
+                displayMovies(filteredMovies);
             }
 
             // Event listener for form submission
@@ -180,6 +179,7 @@
     </script>
 </body>
 </html>
+
 
 
 
