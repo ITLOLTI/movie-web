@@ -96,14 +96,16 @@
     <h1>Oltiflix</h1>
     <!-- Search bar -->
     <div id="search-bar">
-        <input type="text" placeholder="Search...">
-        <button>Search</button>
+        <input type="text" id="search-input" placeholder="Search...">
+        <button id="search-button">Search</button>
     </div>
     <div id="movie-list"></div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const movieList = document.getElementById('movie-list');
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
 
             // Sample movie data
             const movies = [
@@ -117,35 +119,57 @@
                 { title: 'Pulp Fiction', image: 'https://cdn.europosters.eu/image/750/poster/pulp-fiction-one-sheet-i4435.jpg', year: 1994, description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.', link: 'https://www.tiktok.com/@darrkyknej' },
                 { title: 'The Lord of the Rings: The Fellowship of the Ring', image: 'https://m.media-amazon.com/images/I/81EBp0vOZZL._AC_UF894,1000_QL80_.jpg', year: 2001, description: 'A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.', link: 'https://www.tiktok.com/@darrkyknej' },
                 { title: 'Forrest Gump', image: 'https://i.pinimg.com/736x/20/a4/16/20a416ed335a94ed2e535e3ad5def5af.jpg', year: 1994, description: 'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate, and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.', link: 'https://www.tiktok.com/@darrkyknej' },
-                { title: 'The Social Network', image: 'https://m.media-amazon.com/images/M/MV5BOGUyZDUxZjEtMmIzMC00MzlmLTg4MGItZWJmMzBhZjE0Mjc1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg', year: 2010, description: 'As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea, and by the co-founder who was later squeezed out of the business.', link: 'https://www.tiktok.com/@darrkyknej' },
+                { title: 'The Social Network', image: 'https://m.media-amazon.com/images/M/MV5BOGUyZDUxZjEtMmIzMC00MzlmLTg4MGItZWJmMzBhZjE0Mjc1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg', year: 2010, description: 'As Harvard student Mark Zuckerberg creates the social networking site that would become known as Facebook, he is sued by the twins who claimed he stole their idea, and by the co-founder who was later squeezed out of the business.', link: 'https://www.tiktok.com/@darrkyknej' }
                 // Add more movies here
             ];
 
-            // Display movies
-            movies.forEach(movie => {
-                const movieDiv = document.createElement('div');
-                movieDiv.classList.add('movie');
-                movieDiv.onclick = function() {
-                    window.open(movie.link, '_blank');
-                };
+            // Function to display movies
+            function displayMovies(moviesArray) {
+                movieList.innerHTML = ''; // Clear previous movie list
+                moviesArray.forEach(movie => {
+                    const movieDiv = document.createElement('div');
+                    movieDiv.classList.add('movie');
+                    movieDiv.onclick = function() {
+                        window.open(movie.link, '_blank');
+                    };
 
-                const movieImage = document.createElement('img');
-                movieImage.classList.add('movie-image');
-                movieImage.src = movie.image;
-                movieImage.alt = movie.title;
-                movieDiv.appendChild(movieImage);
+                    const movieImage = document.createElement('img');
+                    movieImage.classList.add('movie-image');
+                    movieImage.src = movie.image;
+                    movieImage.alt = movie.title;
+                    movieDiv.appendChild(movieImage);
 
-                movieDiv.innerHTML += `
-                    <h2>${movie.title}</h2>
-                    <p>Year: ${movie.year}</p>
-                    <p>Description: ${movie.description}</p>
-                `;
-                movieList.appendChild(movieDiv);
-            });
+                    movieDiv.innerHTML += `
+                        <h2>${movie.title}</h2>
+                        <p>Year: ${movie.year}</p>
+                        <p>Description: ${movie.description}</p>
+                    `;
+                    movieList.appendChild(movieDiv);
+                });
+            }
+
+            // Display all movies initially
+            displayMovies(movies);
+
+            // Function to filter movies based on search input
+            function filterMovies() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                const filteredMovies = movies.filter(movie => {
+                    return movie.title.toLowerCase().includes(searchTerm);
+                });
+                displayMovies(filteredMovies);
+            }
+
+            // Event listener for search button click
+            searchButton.addEventListener('click', filterMovies);
+
+            // Event listener for search input keyup (for live search)
+            searchInput.addEventListener('keyup', filterMovies);
         });
     </script>
 </body>
 </html>
+
 
 
 
